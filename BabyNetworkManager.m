@@ -45,7 +45,7 @@ static Boolean bNetworkInit = false;
     else
         [parameter setValue:@"0" forKey:@"autologin"];
     
-    NSMutableURLRequest *request = [BabyNetwork requsetUsingPOSTWithURL:url WithHttpBodyDict:parameter];
+    NSMutableURLRequest *request = [BabyNetwork requestUsingPOSTWithURL:url WithHttpBodyDict:parameter];
     [request setHTTPShouldHandleCookies:YES];
     
     NSHTTPURLResponse *response;
@@ -56,6 +56,46 @@ static Boolean bNetworkInit = false;
     BabyLogHttpResponse(response);
 }
 
+/** register*/
++ (bool) registerWithInfo:(NSString*) email withPassword:(NSString*)password withBabyName:(NSString*) babyName
+{
+    
+    return true;
+}
+
+/** check register email*/
++ (bool) checkRegisterEmail:(NSString*)email
+{
+    NSURL *url = [NSURL URLWithString:BabyHomeCheckEmail];
+    NSMutableDictionary *parameter  = [[NSMutableDictionary alloc]init];
+    [parameter setValue:email forKey:@"email"];
+    NSMutableURLRequest *request = [BabyNetwork requestUsingPOSTWithURL:url WithHttpBodyDict:parameter];
+    
+    NSHTTPURLResponse *response;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
+    NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    BabyLog(@"register data:%@",str);
+    
+    NSError *error;
+    NSDictionary * dict;
+    id jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];  ///????&
+    if (jsonDict != nil && error == nil)
+    {
+        if ([jsonDict isKindOfClass:[NSDictionary class]]) {
+            NSLog(@"json is a Dictionary.");
+            NSLog(@"%@", (NSDictionary*)jsonDict);
+            dict = (NSDictionary*)jsonDict;
+            
+            dict = (NSDictionary*)[dict valueForKey:@"data"];
+            bool existed = [[dict valueForKey:@"existed"]boolValue];
+            if (!existed) {
+                return false;
+            }
+        }
+    }
+     
+    return true;
+}
 #pragma mark -
 #pragma mark - add data
 + (NSData*) babyGrowthsWithStartAndLength:(NSUInteger) start Length:(NSUInteger) length

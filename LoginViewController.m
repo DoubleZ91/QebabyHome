@@ -44,7 +44,13 @@
     [BabyNetworkManager loginWithEmailAndPwd:_userNameTF.text withPassword:_passwordTF.text autologin:false];
 }
 
-
+- (IBAction) registerBtnPress:(id) sender
+{
+    if (!_registerVC) {
+        _registerVC = [[BabyRegisterViewController alloc] init];
+    }
+    [self.navigationController pushViewController:_registerVC animated:YES];
+}
 - (IBAction) didEditOnEnd:(id)sender
 {
     [_userNameTF resignFirstResponder];

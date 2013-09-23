@@ -10,6 +10,8 @@
 		0F17C77F17DF0E960055ECEF /* WaterFallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F38492017DEC854000E54C2 /* WaterFallViewController.m */; };
 		0F19EA2417E6D7060073B2A9 /* BabyNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F19EA2317E6D7060073B2A9 /* BabyNetworkManager.m */; };
 		0F19EA2717E6E6530073B2A9 /* BabyHomeDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F19EA2617E6E6530073B2A9 /* BabyHomeDataManager.m */; };
+		0F21783617EE9CBB0016D8CD /* BabyRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F21783417EE9CBB0016D8CD /* BabyRegisterViewController.m */; };
+		0F21783717EE9CBB0016D8CD /* BabyRegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F21783517EE9CBB0016D8CD /* BabyRegisterViewController.xib */; };
 		0F3848E517DEC688000E54C2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3848E417DEC688000E54C2 /* UIKit.framework */; };
 		0F3848E717DEC688000E54C2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3848E617DEC688000E54C2 /* Foundation.framework */; };
 		0F3848E917DEC688000E54C2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3848E817DEC688000E54C2 /* CoreGraphics.framework */; };
@@ -71,6 +73,9 @@
 		0F19EA2317E6D7060073B2A9 /* BabyNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyNetworkManager.m; sourceTree = "<group>"; };
 		0F19EA2517E6E6530073B2A9 /* BabyHomeDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyHomeDataManager.h; sourceTree = "<group>"; };
 		0F19EA2617E6E6530073B2A9 /* BabyHomeDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyHomeDataManager.m; sourceTree = "<group>"; };
+		0F21783317EE9CBB0016D8CD /* BabyRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyRegisterViewController.h; sourceTree = "<group>"; };
+		0F21783417EE9CBB0016D8CD /* BabyRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyRegisterViewController.m; sourceTree = "<group>"; };
+		0F21783517EE9CBB0016D8CD /* BabyRegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BabyRegisterViewController.xib; sourceTree = "<group>"; };
 		0F3848E117DEC688000E54C2 /* QeBaby.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QeBaby.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F3848E417DEC688000E54C2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		0F3848E617DEC688000E54C2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -330,6 +335,9 @@
 				0F5BA58A17E05A470000E01E /* Login.xib */,
 				0F5BA58C17E05AA70000E01E /* LoginViewController.h */,
 				0F5BA58D17E05AA70000E01E /* LoginViewController.m */,
+				0F21783317EE9CBB0016D8CD /* BabyRegisterViewController.h */,
+				0F21783417EE9CBB0016D8CD /* BabyRegisterViewController.m */,
+				0F21783517EE9CBB0016D8CD /* BabyRegisterViewController.xib */,
 			);
 			name = LoginControl;
 			sourceTree = "<group>";
@@ -445,6 +453,7 @@
 				0FFBDCD017DEFF990097299D /* Cameroon.png in Resources */,
 				0F5BA58B17E05A470000E01E /* Login.xib in Resources */,
 				0F53940517E1701300408087 /* CellDetailController.xib in Resources */,
+				0F21783717EE9CBB0016D8CD /* BabyRegisterViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +510,7 @@
 				0F53940817E1B61600408087 /* BabyMsgData.m in Sources */,
 				0F19EA2417E6D7060073B2A9 /* BabyNetworkManager.m in Sources */,
 				0F19EA2717E6E6530073B2A9 /* BabyHomeDataManager.m in Sources */,
+				0F21783617EE9CBB0016D8CD /* BabyRegisterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

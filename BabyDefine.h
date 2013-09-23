@@ -28,7 +28,9 @@
 #define BabyHomeLoginMain @"http://www.qebaby.com/login/dologin"
 #define BabyHomeLogin @"http://www.qebaby.com/login/dologin?email=%@&password=%@"
 #define BabyHomeLoginWithNameAndPassword(username,password) [NSString stringWithFormat:BabyHomeLogin, username,password]
-
+//注册接口
+#define BabyHomeRegister @"http://www.qebaby.com/register/regist"
+#define BabyHomeCheckEmail @"http://www.qebaby.com/register/check_email"
 
 //http
 #define HTTP_POST_STR @"POST"

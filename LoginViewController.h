@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "BabyRegisterViewController.h"
 @interface LoginViewController : UIViewController
 
 @property (nonatomic, weak) IBOutlet UITextField *userNameTF;
 @property (nonatomic, weak) IBOutlet UITextField *passwordTF;
-
+@property (nonatomic, retain) BabyRegisterViewController *registerVC;
 - (IBAction) loginBtnPress: (id) sender;
+- (IBAction) registerBtnPress:(id) sender;
 @end

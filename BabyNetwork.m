@@ -24,7 +24,7 @@ static NSString* BabySession;
     return [parametersArray componentsJoinedByString:@"&"];
 }
 #pragma mark - post
-+ (NSMutableURLRequest*) requsetUsingPOSTWithURL:(NSURL*) url WithHttpBodyDict: (NSDictionary*) parameterDict
++ (NSMutableURLRequest*) requestUsingPOSTWithURL:(NSURL*) url WithHttpBodyDict: (NSDictionary*) parameterDict
 {
     if (parameterDict == nil) {
         return [self requestUsingPOSTWithURL:url WithHttpBodyData:nil];
@@ -164,9 +164,26 @@ static NSString* BabySession;
 /**通过url来获取图片*/
 + (UIImage*) requestImageWithURL:(NSURL*)url
 {
-    NSData *imageData = [[NSData alloc] initWithContentsOfURL:url];
-    UIImage* image = [[UIImage alloc]initWithData:imageData];
-    return image;
+#warning init imageData :need more efficiency code..
+    NSData *imageData = nil;
+    UIImage *image = nil;
+    NSError *error = nil;
+    @try {
+        //imageData = [[NSData alloc] initWithContentsOfURL:url];
+        imageData = [[NSData alloc]initWithContentsOfURL:url options:NSDataReadingMappedAlways error:&error];
+       
+        if(error){
+            BabyLog(@"%@",[error localizedDescription]);
+        }
+        else
+            image = [[UIImage alloc]initWithData:imageData];
+    }
+    @catch (NSException *exception) {
+        BabyLog(@"init imageData error.............................................");
+    }
+    @finally {
+        return image;
+    }
 }
 + (UIImage*) requestImageWithURLString:(NSString*)urlStr
 {

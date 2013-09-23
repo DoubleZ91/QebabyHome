@@ -16,6 +16,13 @@
 
 /** login*/
 + (void) loginWithEmailAndPwd:(NSString*) email withPassword:(NSString*) password autologin:(bool)isAutologin;
+
+#pragma mark - register and check register
+/** register*/
++ (bool) registerWithInfo:(NSString*) email withPassword:(NSString*)password withBabyName:(NSString*) babyName;
+/** check register email*/
++ (bool) checkRegisterEmail:(NSString*)email;
+
 /** baby growths. */
 + (NSData*) babyGrowthsWithStartAndLength:(NSUInteger) start Length:(NSUInteger) length;
 /** get baby MSG with start and length*/

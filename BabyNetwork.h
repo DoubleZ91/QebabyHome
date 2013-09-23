@@ -16,7 +16,7 @@
 #pragma mark -
 #pragma mark - method for creating http POST request
 /** http request use POST method with HttpBodyDict*/
-+ (NSMutableURLRequest*) requsetUsingPOSTWithURL:(NSURL*) url WithHttpBodyDict: (NSDictionary*) parameterDict;
++ (NSMutableURLRequest*) requestUsingPOSTWithURL:(NSURL*) url WithHttpBodyDict: (NSDictionary*) parameterDict;
 /** http resquest use POST method with HttpBodyString*/
 + (NSMutableURLRequest*) requestUsingPOSTWithURL:(NSURL*) url WithHttpBodyString: (NSString*) parameterStr;
 /** http resquest use POST method with httpBodyData*/
