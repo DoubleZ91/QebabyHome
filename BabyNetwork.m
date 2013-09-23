@@ -56,6 +56,7 @@ static NSString* BabySession;
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0f];
         [request setHTTPMethod:HTTP_POST_STR];
         [request setHTTPBody:parameterData];
+        
         return request;
     }
 }
@@ -135,7 +136,11 @@ static NSString* BabySession;
                 continue;
             }
             //缩放成为符合要求的大小 ---imageView处修改比例
-            //image = [self scaleToRequireImage:image];
+            image = [self scaleToRequireImage:image];
+            //image = [self resizeImage:image];
+            if (image == nil) {
+                continue;
+            }
             [imageArray addObject:image];
         }
     }
@@ -145,15 +150,15 @@ static NSString* BabySession;
 + (UIImage*) scaleToRequireImage:(UIImage*) srcImage
 {
     CGRect screenSize = [[UIScreen mainScreen] bounds];
-    NSInteger imageWidth = screenSize.size.width  - 20;
+    float imageWidth = screenSize.size.width  - 20;
     
     if (imageWidth > srcImage.size.width) {
         return srcImage;
     }
     
     float scale = srcImage.size.width / imageWidth;
-    UIGraphicsBeginImageContext(CGSizeMake(imageWidth, srcImage.size.height * scale));
-    [srcImage drawInRect:CGRectMake(0, 0, imageWidth, srcImage.size.height *scale)];
+    UIGraphicsBeginImageContext(CGSizeMake(imageWidth, srcImage.size.height / scale));
+    [srcImage drawInRect:CGRectMake(0, 0, imageWidth, srcImage.size.height /scale)];
     UIImage *scaleImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
@@ -162,6 +167,18 @@ static NSString* BabySession;
 
 
 /**通过url来获取图片*/
++ (UIImage *) resizeImage:(UIImage*)image
+{
+    CGSize size = image.size;
+    float scale = size.width/MainScreenWidth;
+    size.width = MainScreenWidth;
+    size.height = size.height/scale;
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
 + (UIImage*) requestImageWithURL:(NSURL*)url
 {
 #warning init imageData :need more efficiency code..
@@ -182,6 +199,7 @@ static NSString* BabySession;
         BabyLog(@"init imageData error.............................................");
     }
     @finally {
+        
         return image;
     }
 }

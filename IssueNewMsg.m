@@ -27,12 +27,28 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+#ifdef __IPHONE_7_0
+    if ([[[UIDevice currentDevice] systemVersion] intValue] >= 7) {
+        [self setEdgesForExtendedLayout:UIRectEdgeNone];
+    }
+#endif
+
+    //UIBarButtonItem *btnSend = [[UIBarButtonItem alloc]initWithTitle:@"send" style:UIBarButtonItemStyleBordered target:self action:@selector(sendBtnPress:)];
+    //self.navigationItem.rightBarButtonItem = btnSend;
 }
 
+/*send button has been clicked*/
+- (IBAction) sendBtnPress:(id)sender
+{
+    if ([_delegate respondsToSelector:@selector(dismissThePresented)]) {
+        [_delegate dismissThePresented];
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+
 }
 
 @end

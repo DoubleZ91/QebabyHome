@@ -27,7 +27,11 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+#ifdef __IPHONE_7_0
+    if ([[[UIDevice currentDevice] systemVersion] intValue] >= 7) {
+        [self setEdgesForExtendedLayout:UIRectEdgeNone];
+    }
+#endif
     
 }
 

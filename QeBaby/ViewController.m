@@ -19,6 +19,12 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+#ifdef __IPHONE_7_0
+    if ([[[UIDevice currentDevice] systemVersion] intValue] >= 7) {
+        [self setEdgesForExtendedLayout:UIRectEdgeNone];
+    }
+#endif
+    
     
     UIButton *refreshBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     refreshBtn.frame = CGRectMake(10, 120, 300, 40);

@@ -7,7 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol IssueNewMsgProtocol;
 
 @interface IssueNewMsg : UIViewController
+
+@property (nonatomic,weak) id<IssueNewMsgProtocol> delegate;
+
+@property (nonatomic,weak) IBOutlet UITextView *contentTF;
+
+- (IBAction) sendBtnPress:(id)sender;
+@end
+
+
+@protocol IssueNewMsgProtocol <NSObject>
+
+- (void) dismissThePresented;
 
 @end

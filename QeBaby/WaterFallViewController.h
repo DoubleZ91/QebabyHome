@@ -7,18 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IssueNewMsg.h"
 @class QebabyHomeData;
 @class CellDetailController;
 @class BabyHomeDataManager;
-@interface WaterFallViewController : UITableViewController
+
+@interface WaterFallViewController : UITableViewController<IssueNewMsgProtocol>
 
 //@property (nonatomic, retain) UIRefreshControl *refreshControl;
 @property (nonatomic, retain)CellDetailController *cellDetailController;
+@property (nonatomic, retain)IssueNewMsg *issueNewMsgController;
 
 @property (nonatomic, assign)NSInteger tableViewCellSum;
 @property (nonatomic, assign)NSInteger bottomCellIndex;
 @property (nonatomic, retain)QebabyHomeData *babyHomeData;
 @property (nonatomic, retain)BabyHomeDataManager *babyHomeDataMgr;
+
+
 - (void) refreshView:(UIRefreshControl*)refreshControl;
 
+#pragma mark - issueMsgView protocol
+- (void) dismissThePresented;
 @end

@@ -59,7 +59,37 @@ static Boolean bNetworkInit = false;
 /** register*/
 + (bool) registerWithInfo:(NSString*) email withPassword:(NSString*)password withBabyName:(NSString*) babyName
 {
+    NSURL *url = [NSURL URLWithString:BabyHomeRegister];
+    NSMutableDictionary *parameter = [[NSMutableDictionary alloc]init];
+    [parameter setValue:email forKey:@"email"];
+    [parameter setValue:password forKey:@"password"];
+    [parameter setValue:password forKey:@"password2"];
+    [parameter setValue:babyName forKey:@"baby_name"];
+    NSMutableURLRequest *request = [BabyNetwork requestUsingPOSTWithURL:url WithHttpBodyDict:parameter];
     
+    NSHTTPURLResponse *response;
+    NSData* data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
+    NSString *str =  [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    
+    BabyLog(@"Register data:%@",str);
+    BabyLogHttpResponse(response);
+    
+    NSError *error;
+    NSDictionary * dict;
+    id jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];  ///????&
+    if (jsonDict != nil && error == nil)
+    {
+        if ([jsonDict isKindOfClass:[NSDictionary class]]) {
+            NSLog(@"json is a Dictionary.");
+            NSLog(@"%@", (NSDictionary*)jsonDict);
+            dict = (NSDictionary*)jsonDict;
+            
+            bool tmp = [[dict valueForKey:@"code"] boolValue];
+            if (tmp != 0) {
+                return false;
+            }
+        }
+    }
     return true;
 }
 

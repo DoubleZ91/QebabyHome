@@ -13,6 +13,7 @@
 #import "CellDetailController.h"
 #import "BabyHomeDataManager.h"
 #import <dispatch/dispatch.h>
+#import "IssueNewMsg.h"
 
 #define LoadMoreNum 10
 @interface WaterFallViewController ()
@@ -45,6 +46,15 @@
     //waterfallTableView.delegate = self;
     //waterfallTableView.dataSource = self;
     
+#ifdef __IPHONE_7_0
+    if ([[[UIDevice currentDevice] systemVersion] intValue] >= 7) {
+        [self setEdgesForExtendedLayout:UIRectEdgeNone];
+    }
+#endif
+    
+    UIBarButtonItem *barBtn = [[UIBarButtonItem alloc]initWithTitle:@"new" style:UIBarButtonItemStyleBordered target:self action:@selector(newGrowth:)];
+    self.navigationItem.rightBarButtonItem = barBtn;
+    
     //下拉更新控制器
     UIRefreshControl *refresh = [[UIRefreshControl alloc]init];
     refresh.tintColor = [UIColor lightGrayColor];
@@ -72,6 +82,16 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - btn down
+- (void) newGrowth:(id)sender
+{
+    if (_issueNewMsgController == nil) {
+        _issueNewMsgController = [[IssueNewMsg alloc]init];
+        _issueNewMsgController.delegate = self;
+    }
+    [self presentViewController:_issueNewMsgController animated:YES completion:nil];
 }
 #pragma mark - 
 #pragma mark - RefreshViewControl
@@ -305,6 +325,11 @@
     [self.navigationController pushViewController:_cellDetailController animated:YES];
 }
 
+#pragma mark - issueMsgView protocol
+- (void) dismissThePresented
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 
 - (CGSize) scaleRect:(CGSize)srcSize

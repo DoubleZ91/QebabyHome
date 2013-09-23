@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 //#import "ViewController.h"
 #import "WaterFallViewController.h"
+#import "BabyNetworkManager.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -27,6 +28,10 @@
     self.window.rootViewController = nvc;
     
     [self.window makeKeyAndVisible];
+    
+    
+    //初始化网络
+    [BabyNetworkManager initNetworkWorkplace];
     return YES;
 }
 							

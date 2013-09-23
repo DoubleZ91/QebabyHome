@@ -75,3 +75,8 @@
 #define ImageHeightPer 480
 #define ImageWidthPer 360
 #define ContentLabelHeight 400
+
+
+/** 32 bit operate*/
+#define BitSetTrue(value,bit)   value |= (1<<(bit-1))
+#define BitSetFalse(value,bit)  value &= 0xFFFF - (1<<(bit-1))

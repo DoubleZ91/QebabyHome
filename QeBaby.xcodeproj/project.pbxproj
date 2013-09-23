@@ -49,6 +49,11 @@
 		0F5BA5B017E068DA0000E01E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F5BA5AF17E068DA0000E01E /* CFNetwork.framework */; };
 		0F5BA5B217E068E90000E01E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F5BA5B117E068E90000E01E /* Security.framework */; };
 		0F5BA5B517E072190000E01E /* BabyNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F5BA5B417E072190000E01E /* BabyNetwork.m */; };
+		0FED5C9A17EFDB4200307C5F /* PersonalPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FED5C9817EFDB4200307C5F /* PersonalPanel.m */; };
+		0FED5C9B17EFDB4200307C5F /* PersonalPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FED5C9917EFDB4200307C5F /* PersonalPanel.xib */; };
+		0FED5C9E17EFDEE300307C5F /* PersonalPanelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FED5C9D17EFDEE300307C5F /* PersonalPanelCell.xib */; };
+		0FED5CA217EFE68300307C5F /* IssueNewMsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FED5CA017EFE68300307C5F /* IssueNewMsg.m */; };
+		0FED5CA317EFE68300307C5F /* IssueNewMsg.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FED5CA117EFE68300307C5F /* IssueNewMsg.xib */; };
 		0FFBDCCB17DEFF990097299D /* Argentina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FFBDCC517DEFF990097299D /* Argentina.png */; };
 		0FFBDCCC17DEFF990097299D /* Australia.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FFBDCC617DEFF990097299D /* Australia.png */; };
 		0FFBDCCD17DEFF990097299D /* Austria.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FFBDCC717DEFF990097299D /* Austria.png */; };
@@ -139,6 +144,13 @@
 		0F5BA5B117E068E90000E01E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0F5BA5B317E072190000E01E /* BabyNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyNetwork.h; sourceTree = "<group>"; };
 		0F5BA5B417E072190000E01E /* BabyNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyNetwork.m; sourceTree = "<group>"; };
+		0FED5C9717EFDB4200307C5F /* PersonalPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalPanel.h; sourceTree = "<group>"; };
+		0FED5C9817EFDB4200307C5F /* PersonalPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalPanel.m; sourceTree = "<group>"; };
+		0FED5C9917EFDB4200307C5F /* PersonalPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonalPanel.xib; sourceTree = "<group>"; };
+		0FED5C9D17EFDEE300307C5F /* PersonalPanelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonalPanelCell.xib; sourceTree = "<group>"; };
+		0FED5C9F17EFE68300307C5F /* IssueNewMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IssueNewMsg.h; sourceTree = "<group>"; };
+		0FED5CA017EFE68300307C5F /* IssueNewMsg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IssueNewMsg.m; sourceTree = "<group>"; };
+		0FED5CA117EFE68300307C5F /* IssueNewMsg.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IssueNewMsg.xib; sourceTree = "<group>"; };
 		0FFBDCC517DEFF990097299D /* Argentina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Argentina.png; sourceTree = "<group>"; };
 		0FFBDCC617DEFF990097299D /* Australia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Australia.png; sourceTree = "<group>"; };
 		0FFBDCC717DEFF990097299D /* Austria.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Austria.png; sourceTree = "<group>"; };
@@ -289,6 +301,7 @@
 		0F53940917E1B62D00408087 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				0FED5C9C17EFDB6C00307C5F /* Personal */,
 				0F53940B17E1B68900408087 /* CellDetailControl */,
 				0F53940A17E1B66800408087 /* WaterFallControl */,
 				0F5BA58617E059AA0000E01E /* LoginControl */,
@@ -366,6 +379,20 @@
 				0F5BA5A517E061A80000E01E /* UIImageView+AFNetworking.m */,
 			);
 			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+		0FED5C9C17EFDB6C00307C5F /* Personal */ = {
+			isa = PBXGroup;
+			children = (
+				0FED5C9717EFDB4200307C5F /* PersonalPanel.h */,
+				0FED5C9817EFDB4200307C5F /* PersonalPanel.m */,
+				0FED5C9917EFDB4200307C5F /* PersonalPanel.xib */,
+				0FED5C9D17EFDEE300307C5F /* PersonalPanelCell.xib */,
+				0FED5C9F17EFE68300307C5F /* IssueNewMsg.h */,
+				0FED5CA017EFE68300307C5F /* IssueNewMsg.m */,
+				0FED5CA117EFE68300307C5F /* IssueNewMsg.xib */,
+			);
+			name = Personal;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -454,6 +481,9 @@
 				0F5BA58B17E05A470000E01E /* Login.xib in Resources */,
 				0F53940517E1701300408087 /* CellDetailController.xib in Resources */,
 				0F21783717EE9CBB0016D8CD /* BabyRegisterViewController.xib in Resources */,
+				0FED5C9B17EFDB4200307C5F /* PersonalPanel.xib in Resources */,
+				0FED5C9E17EFDEE300307C5F /* PersonalPanelCell.xib in Resources */,
+				0FED5CA317EFE68300307C5F /* IssueNewMsg.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,6 +541,8 @@
 				0F19EA2417E6D7060073B2A9 /* BabyNetworkManager.m in Sources */,
 				0F19EA2717E6E6530073B2A9 /* BabyHomeDataManager.m in Sources */,
 				0F21783617EE9CBB0016D8CD /* BabyRegisterViewController.m in Sources */,
+				0FED5C9A17EFDB4200307C5F /* PersonalPanel.m in Sources */,
+				0FED5CA217EFE68300307C5F /* IssueNewMsg.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

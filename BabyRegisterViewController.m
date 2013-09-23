@@ -31,7 +31,7 @@ typedef enum  {
     if (self) {
         // Custom initialization
         _isRightCheck = false;
-        _isCanRegister = false;
+        _isCanRegister = 0x0F;
     
     }
     return self;
@@ -42,6 +42,12 @@ typedef enum  {
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+#ifdef __IPHONE_7_0
+    if ([[[UIDevice currentDevice] systemVersion] intValue] >= 7) {
+        [self setEdgesForExtendedLayout:UIRectEdgeNone];
+    }
+#endif
+    
     //_readRightCheck.adjustsImageWhenHighlighted = YES;
     //_readRightCheck.adjustsImageWhenDisabled = YES;
     [_readRightCheck setBackgroundImage:[UIImage imageNamed:@"Austria.png" ] forState:UIControlStateSelected];
@@ -62,11 +68,22 @@ typedef enum  {
 
 - (IBAction)signUpBtnPress:(id)sender
 {
-    if (_isRightCheck && _isCanRegister) {
-        [BabyNetworkManager registerWithInfo:_emailTF.text withPassword:_passwordTF.text withBabyName:_babynameTF.text];
-        return;
+    if (_isRightCheck && _isCanRegister==0) {
+        if ([BabyNetworkManager registerWithInfo:_emailTF.text withPassword:_passwordTF.text withBabyName:_babynameTF.text]) {
+            //注册成功，将邮箱标记位致为有误
+            _isCanRegister |= 0x01;
+            [BabyNetworkManager loginWithEmailAndPwd:_emailTF.text withPassword:_passwordTF.text autologin:NO];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+            return;
+        }
     }
-    //[self.navigationController popViewControllerAnimated:YES];
+    if (!_isRightCheck) {
+        NSLog(@"please read the user.txt ,and accept it.-just check the box");
+    }
+    if (_isCanRegister != 0) {
+        NSLog(@"you register msg is wrong.");
+    }
+    return;
 }
 
 - (IBAction)rightCheckBtnPress:(id)sender
@@ -88,8 +105,8 @@ typedef enum  {
 
 - (IBAction) textEditEnd:(id)sender
 {
-    _isCanRegister = false;
     if (sender == _emailTF) {
+        _isCanRegister |= 0x01;
         //判断是否email是否有效
         if (_emailTF.text == nil) {
             [self alertViewShow:RAEmailEmpty];
@@ -104,9 +121,10 @@ typedef enum  {
             [self alertViewShow:RAEmailExisted];
             return;
         }
+        _isCanRegister &= 0xFD;
     }
     else if(sender == _passwordTF){
-        
+        _isCanRegister |= 0x02;
         if (_passwordTF.text == nil) {
             [self alertViewShow:RAPasswordEmpty];
             return;
@@ -115,20 +133,24 @@ typedef enum  {
             [self alertViewShow:RAPasswordTooSmall];
             return;
         }
+        _isCanRegister &= 0xFC;
     }
     else if (sender == _confirmTF){
+        _isCanRegister |= 0x04;
         if (![_confirmTF.text isEqualToString:_passwordTF.text]) {
             [self alertViewShow:RAConfirmError];
             return;
         }
+        _isCanRegister &= 0xFA;
     }
     else if (sender == _babynameTF){
+        _isCanRegister |= 0x08;
         if (_babynameTF.text.length < 1) {
             [self alertViewShow:RABabyNameError];
             return;
         }
+        _isCanRegister &= 0xF7;
     }
-    _isCanRegister = true;
 }
 
 - (void) alertViewShow:(RegisterAlertState) raState

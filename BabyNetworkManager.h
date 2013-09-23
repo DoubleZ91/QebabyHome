@@ -31,4 +31,8 @@
 
 + (NSData*) babyGrowthsWithURL:(NSURL*) url;
 
+
+
+/** upload image*/
+//+ (void) uploadImage
 @end
