@@ -32,6 +32,9 @@
 #define BabyHomeRegister @"http://www.qebaby.com/register/regist"
 #define BabyHomeCheckEmail @"http://www.qebaby.com/register/check_email"
 
+//发布说说接口
+#define BabyHomeCreateGrowth @"http://www.qebaby.com/growth/create"
+
 //http
 #define HTTP_POST_STR @"POST"
 #define HTTP_GET_STR @"GET"
@@ -47,7 +50,6 @@
 #define BabyLogHttpResponse(response) \
                     BabyLog(@"response http header field:%@", [response allHeaderFields]);\
                     BabyLog(@"response status code:%d",response.statusCode);
-#endif
 
 
 //baby notification
@@ -80,3 +82,7 @@
 /** 32 bit operate*/
 #define BitSetTrue(value,bit)   value |= (1<<(bit-1))
 #define BitSetFalse(value,bit)  value &= 0xFFFF - (1<<(bit-1))
+
+
+#endif
+

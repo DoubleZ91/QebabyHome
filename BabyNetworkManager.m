@@ -154,4 +154,37 @@ static Boolean bNetworkInit = false;
     BabyLogHttpResponse(response);
     return data;
 }
+
+#pragma mark -
+#pragma mark - create growths
+/** create growth which only has content*/
++ (void) createGrowthWithContent:(NSString*) content
+{
+    NSDate *date = [NSDate date];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    unsigned int unitFlag = NSDayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit;
+    NSDateComponents *dd = [cal components:unitFlag fromDate:date];
+    int year = [dd year];
+    int month = [dd month];
+    int day = [dd day];
+    NSString *today = [NSString stringWithFormat:@"%d-%d-%d",year,month,day];
+    
+    NSURL *url = [NSURL URLWithString:BabyHomeCreateGrowth];
+    NSMutableDictionary *parameter = [[NSMutableDictionary alloc]init];
+    [parameter setValue:content forKey:@"content"];
+    [parameter setValue:@"" forKey:@"image"];
+    [parameter setValue:today forKey:@"timeline"];
+    
+    NSHTTPURLResponse *response;
+    NSURLRequest *request = [BabyNetwork requestUsingPOSTWithURL:url WithHttpBodyDict:parameter];
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
+//    NSString *string = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    
+    BabyLogData(@"create growth:%@", data);
+}
+/** create growth which has content and image*/
++ (void) createGrowthWithContentAndImageArray:(NSString*) content withImageArray :(NSArray*) imageArr
+{
+    
+}
 @end

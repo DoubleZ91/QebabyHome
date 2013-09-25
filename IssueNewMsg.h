@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 @protocol IssueNewMsgProtocol;
 
-@interface IssueNewMsg : UIViewController
+@interface IssueNewMsg : UIViewController<UITextViewDelegate>
 
 @property (nonatomic,weak) id<IssueNewMsgProtocol> delegate;
 
 @property (nonatomic,weak) IBOutlet UITextView *contentTF;
-
+@property (nonatomic,weak) IBOutlet UILabel *timeLabel;
+@property (nonatomic,weak) IBOutlet UIToolbar *bottomToolbar;
 - (IBAction) sendBtnPress:(id)sender;
+- (IBAction) cancelBtnPress:(id)sender;
 @end
 
 

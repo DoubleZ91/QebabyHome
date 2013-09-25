@@ -35,4 +35,8 @@
 
 /** upload image*/
 //+ (void) uploadImage
+/** create growth which only has content*/
++ (void) createGrowthWithContent:(NSString*) content;
+/** create growth which has content and image*/
++ (void) createGrowthWithContentAndImageArray:(NSString*) content withImageArray :(NSArray*) imageArr;
 @end

@@ -198,7 +198,7 @@
     //先显示文字
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(int)[jsonDict valueForKey:@"growth_timeline"]];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(int)[jsonDict valueForKey:@"growth_dateline"]];
     NSString *dateStr = [formatter stringFromDate:date];
     cell.timeLabel.text = dateStr;
     cell.headImageView.image = nil;
@@ -218,6 +218,11 @@
         CGSize imageViewSize = [self scaleRect: imageContent.size];
         [cell.contentImageView setFrame:CGRectMake(0, HeadViewHeight+ Height(cell.contentLabel), imageViewSize.width, imageViewSize.height)];
         cell.contentImageView.image = [msg.imageArray objectAtIndex:0];
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewTaped:)];
+        singleTap.numberOfTapsRequired = 1;
+        singleTap.numberOfTouchesRequired = 1;
+        [cell.contentImageView addGestureRecognizer:singleTap];
+        [cell.contentImageView setUserInteractionEnabled:YES];
     }
     BabyLog(@"cell ready...........");
     return cell;
@@ -266,6 +271,10 @@
     });
 }
 
+- (void) imageViewTaped:(UIGestureRecognizer *) gestureRecognizer
+{
+    BabyLog(@"single tap.............");
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
