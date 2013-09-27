@@ -158,7 +158,7 @@ static Boolean bNetworkInit = false;
 #pragma mark -
 #pragma mark - create growths
 /** create growth which only has content*/
-+ (void) createGrowthWithContent:(NSString*) content
++ (bool) createGrowthWithContent:(NSString*) content
 {
     NSDate *date = [NSDate date];
     NSCalendar *cal = [NSCalendar currentCalendar];
@@ -180,11 +180,36 @@ static Boolean bNetworkInit = false;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
 //    NSString *string = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
     
+    NSError *error;
+    NSDictionary *dict;
+    id jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];  ///????&
+    
+    if (jsonDict == nil || error != nil)
+    {
+        NSLog(@"jsonDict || error  is nil.....");
+        return false;
+     }
+    if ([jsonDict isKindOfClass:[NSDictionary class]]) {
+        NSLog(@"json is a Dictionary.");
+        NSLog(@"%@", (NSDictionary*)jsonDict);
+        dict = (NSDictionary*)jsonDict;
+        
+        dict = (NSDictionary*)[dict valueForKey:@"data"];
+        NSInteger code = [[dict valueForKey:@"code"]integerValue];
+        //code 必须等于0
+        if (code) {
+            return false;
+        }
+    }
+    else
+        return false;
+
     BabyLogData(@"create growth:%@", data);
+    return true;
 }
 /** create growth which has content and image*/
-+ (void) createGrowthWithContentAndImageArray:(NSString*) content withImageArray :(NSArray*) imageArr
++ (bool) createGrowthWithContentAndImageArray:(NSString*) content withImageArray :(NSArray*) imageArr
 {
-    
+    return true;
 }
 @end

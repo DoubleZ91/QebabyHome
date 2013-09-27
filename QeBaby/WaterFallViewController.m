@@ -218,6 +218,7 @@
         CGSize imageViewSize = [self scaleRect: imageContent.size];
         [cell.contentImageView setFrame:CGRectMake(0, HeadViewHeight+ Height(cell.contentLabel), imageViewSize.width, imageViewSize.height)];
         cell.contentImageView.image = [msg.imageArray objectAtIndex:0];
+        //应该移到cell controller中。
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewTaped:)];
         singleTap.numberOfTapsRequired = 1;
         singleTap.numberOfTouchesRequired = 1;

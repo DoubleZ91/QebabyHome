@@ -69,10 +69,16 @@
     float contentHeight = MainScreenHeight - 2 * Height(_bottomToolbar) - 40;
     _contentTF.frame = CGRectMake(20 ,Height(_bottomToolbar) + Height(_timeLabel) + 5 , contentWidth, contentHeight);
     
-    [_contentTF setText:@"gray ......."];
+    [_contentTF setText:@"请在此处输入您所要发表的文字 ......."];
     [_contentTF setFont:[UIFont fontWithName:@"HelveticaNeue" size:11]];
     [_contentTF setTextColor:[UIColor lightGrayColor]];
     //[_contentTF becomeFirstResponder];
+    
+    NSDate *now = [NSDate date];
+    NSDateFormatter  * formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy-mm-dd hh:mm:ss"];
+    NSString *dateStr =  [formatter stringFromDate:now];
+    _timeLabel.text = dateStr;
     NSLog(@"%@",_contentTF);
 }
 
@@ -106,11 +112,23 @@
 - (IBAction) sendBtnPress:(id)sender
 {
     [_contentTF resignFirstResponder];
-    
-    if (_contentTF.text != nil) {
-        [BabyNetworkManager createGrowthWithContent:_contentTF.text];
+    if (_contentTF.textColor == [UIColor lightGrayColor]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"error" message:@"please input something." delegate:nil cancelButtonTitle:@"cancel" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
     }
     
+    if (_contentTF.text == nil) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"error" message:@"the content can not be empty." delegate:nil cancelButtonTitle:@"cancel" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
+    if(![BabyNetworkManager createGrowthWithContent:_contentTF.text])
+    {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"error" message:@"send error.may be you need to login." delegate:nil cancelButtonTitle:@"cancel" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
     if ([_delegate respondsToSelector:@selector(dismissThePresented)]) {
         [_delegate dismissThePresented];
     }

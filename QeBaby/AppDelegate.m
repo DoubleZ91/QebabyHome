@@ -23,7 +23,10 @@
 //    [self.window makeKeyAndVisible];
     
     self.viewController = [[ViewController alloc] init] ;
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:self.viewController] ;
+    self.sideBarController = [[SideBarController alloc]init];
+    //UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:self.viewController] ;
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:self.sideBarController] ;
+    nvc.navigationBarHidden = YES;
     
     self.window.rootViewController = nvc;
     
