@@ -49,6 +49,8 @@
 		0F5BA5B017E068DA0000E01E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F5BA5AF17E068DA0000E01E /* CFNetwork.framework */; };
 		0F5BA5B217E068E90000E01E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F5BA5B117E068E90000E01E /* Security.framework */; };
 		0F5BA5B517E072190000E01E /* BabyNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F5BA5B417E072190000E01E /* BabyNetwork.m */; };
+		0FEB94D317F518A40063200A /* BabyImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FEB94D117F518A40063200A /* BabyImageViewController.m */; };
+		0FEB94D417F518A40063200A /* BabyImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FEB94D217F518A40063200A /* BabyImageViewController.xib */; };
 		0FED5C9A17EFDB4200307C5F /* PersonalPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FED5C9817EFDB4200307C5F /* PersonalPanel.m */; };
 		0FED5C9B17EFDB4200307C5F /* PersonalPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FED5C9917EFDB4200307C5F /* PersonalPanel.xib */; };
 		0FED5C9E17EFDEE300307C5F /* PersonalPanelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FED5C9D17EFDEE300307C5F /* PersonalPanelCell.xib */; };
@@ -173,6 +175,9 @@
 		0F5BA5B117E068E90000E01E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0F5BA5B317E072190000E01E /* BabyNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyNetwork.h; sourceTree = "<group>"; };
 		0F5BA5B417E072190000E01E /* BabyNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyNetwork.m; sourceTree = "<group>"; };
+		0FEB94D017F518A40063200A /* BabyImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyImageViewController.h; sourceTree = "<group>"; };
+		0FEB94D117F518A40063200A /* BabyImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyImageViewController.m; sourceTree = "<group>"; };
+		0FEB94D217F518A40063200A /* BabyImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BabyImageViewController.xib; sourceTree = "<group>"; };
 		0FED5C9717EFDB4200307C5F /* PersonalPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalPanel.h; sourceTree = "<group>"; };
 		0FED5C9817EFDB4200307C5F /* PersonalPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalPanel.m; sourceTree = "<group>"; };
 		0FED5C9917EFDB4200307C5F /* PersonalPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonalPanel.xib; sourceTree = "<group>"; };
@@ -414,6 +419,9 @@
 				0F38492017DEC854000E54C2 /* WaterFallViewController.m */,
 				0F38492217DEC8CC000E54C2 /* WaterFallTableViewCell.h */,
 				0F38492317DEC8CD000E54C2 /* WaterFallTableViewCell.m */,
+				0FEB94D017F518A40063200A /* BabyImageViewController.h */,
+				0FEB94D117F518A40063200A /* BabyImageViewController.m */,
+				0FEB94D217F518A40063200A /* BabyImageViewController.xib */,
 			);
 			name = WaterFallControl;
 			sourceTree = "<group>";
@@ -679,6 +687,7 @@
 				0F21783717EE9CBB0016D8CD /* BabyRegisterViewController.xib in Resources */,
 				0FED5C9B17EFDB4200307C5F /* PersonalPanel.xib in Resources */,
 				0FED5C9E17EFDEE300307C5F /* PersonalPanelCell.xib in Resources */,
+				0FEB94D417F518A40063200A /* BabyImageViewController.xib in Resources */,
 				0FED5CA317EFE68300307C5F /* IssueNewMsg.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -750,6 +759,7 @@
 				0FF5B7DD17F43CD200D6D940 /* Dialog.m in Sources */,
 				0FF5B7B217F4350200D6D940 /* SDWebImageDecoder.m in Sources */,
 				0F53940817E1B61600408087 /* BabyMsgData.m in Sources */,
+				0FEB94D317F518A40063200A /* BabyImageViewController.m in Sources */,
 				0F19EA2417E6D7060073B2A9 /* BabyNetworkManager.m in Sources */,
 				0FF5B7CC17F4394700D6D940 /* XWCTView.m in Sources */,
 				0F19EA2717E6E6530073B2A9 /* BabyHomeDataManager.m in Sources */,

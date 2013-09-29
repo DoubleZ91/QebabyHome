@@ -14,6 +14,7 @@
 #import "BabyHomeDataManager.h"
 #import <dispatch/dispatch.h>
 #import "IssueNewMsg.h"
+#import "BabyImageViewController.h"
 
 #define LoadMoreNum 10
 @interface WaterFallViewController ()
@@ -37,15 +38,6 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    //UITableView *waterfallTableView = [[UITableView alloc]initWithFrame:[[UIScreen mainScreen] bounds]];
-    //waterfallTableView.delegate = self;
-    //waterfallTableView.dataSource = self;
-    
 #ifdef __IPHONE_7_0
     if ([[[UIDevice currentDevice] systemVersion] intValue] >= 7) {
         [self setEdgesForExtendedLayout:UIRectEdgeNone];
@@ -167,7 +159,7 @@
     WaterFallTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier ];
     if (!cell) {
         cell = [[WaterFallTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        
+        cell.delegate = self;
     }
     // Configure the cell...
     
@@ -198,11 +190,22 @@
     //先显示文字
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(int)[jsonDict valueForKey:@"growth_dateline"]];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(int)[jsonDict valueForKey:@"growth_timeline"]];
     NSString *dateStr = [formatter stringFromDate:date];
     cell.timeLabel.text = dateStr;
     cell.headImageView.image = nil;
-    cell.contentImageView.image = nil;
+    
+    // 图片清理工作
+    //手势清理
+    [cell.gestureArray removeAllObjects];
+    //cell.contentImageView.image = nil;
+    [cell.imageURLArray removeAllObjects];
+    for (int i = 0; i < cell.imageViewArray.count;++i) {
+        [[cell.imageViewArray objectAtIndex:i]removeFromSuperview];
+    }
+    [cell.imageViewArray removeAllObjects];
+    
+    [cell.imageURLArray addObjectsFromArray:(NSArray *)[jsonDict valueForKey:@"growth_photos"]];
     //为了异步加载，可能需改成loadURL
     //加载图片
     if (_babyHomeData.babyMsgData.count <= indexPath.row) {
@@ -213,18 +216,19 @@
     cell.headImageView.image = msg.headImage;
     cell.nameLabel.text = msg.name;
 
-    if (msg.imageArray.count > 0) {
-        UIImage * imageContent = [msg.imageArray objectAtIndex:0];
-        CGSize imageViewSize = [self scaleRect: imageContent.size];
-        [cell.contentImageView setFrame:CGRectMake(0, HeadViewHeight+ Height(cell.contentLabel), imageViewSize.width, imageViewSize.height)];
-        cell.contentImageView.image = [msg.imageArray objectAtIndex:0];
-        //应该移到cell controller中。
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewTaped:)];
-        singleTap.numberOfTapsRequired = 1;
-        singleTap.numberOfTouchesRequired = 1;
-        [cell.contentImageView addGestureRecognizer:singleTap];
-        [cell.contentImageView setUserInteractionEnabled:YES];
-    }
+//    if (msg.imageArray.count > 0) {
+//        UIImage * imageContent = [msg.imageArray objectAtIndex:0];
+//        CGSize imageViewSize = [self scaleRect: imageContent.size];
+//        [cell.contentImageView setFrame:CGRectMake(0, HeadViewHeight+ Height(cell.contentLabel), imageViewSize.width, imageViewSize.height)];
+//        cell.contentImageView.image = [msg.imageArray objectAtIndex:0];
+//        //应该移到cell controller中。
+////        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewTaped:)];
+////        singleTap.numberOfTapsRequired = 1;
+////        singleTap.numberOfTouchesRequired = 1;
+////        [cell.contentImageView addGestureRecognizer:singleTap];
+////        [cell.contentImageView setUserInteractionEnabled:YES];
+//    }
+    [cell configCellImageShow:msg.imageArray];
     BabyLog(@"cell ready...........");
     return cell;
 }
@@ -243,7 +247,7 @@
 }
 - (void)viewDidAppear:(BOOL)animated {
 	
-	[self.tableView setContentOffset:CGPointMake(0, 44.f) animated:NO];
+	//[self.tableView setContentOffset:CGPointMake(0, 44.f) animated:NO];
 }
 
 - (void) refreshData
@@ -272,9 +276,19 @@
     });
 }
 
-- (void) imageViewTaped:(UIGestureRecognizer *) gestureRecognizer
+//- (void) imageViewTaped:(UIGestureRecognizer *) gestureRecognizer
+//{
+//    BabyLog(@"single tap.............");
+//}
+- (void) didTapedWaterFallCellImage:(NSString *)url
 {
-    BabyLog(@"single tap.............");
+    BabyLog(@"single tap image.............");
+    BabyImageViewController *babyImageController = [[BabyImageViewController alloc]init];
+    
+    [babyImageController setBabyImageURL:url];
+    babyImageController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    [self presentViewController:babyImageController animated:YES completion:nil];
 }
 /*
 // Override to support conditional editing of the table view.
@@ -347,9 +361,9 @@
     CGRect screenSize = [[UIScreen mainScreen] bounds];
     NSInteger imageMaxWidth = screenSize.size.width;
     
-//    if (srcSize.width < imageMaxWidth){
-//        return srcSize;
-//    }
+    if (srcSize.width < imageMaxWidth){
+        return srcSize;
+    }
     
     float scale = imageMaxWidth / srcSize.width;
     CGSize imageViewSize = CGSizeMake(imageMaxWidth, srcSize.height * scale);

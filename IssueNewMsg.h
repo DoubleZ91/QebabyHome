@@ -9,13 +9,18 @@
 #import <UIKit/UIKit.h>
 @protocol IssueNewMsgProtocol;
 
-@interface IssueNewMsg : UIViewController<UITextViewDelegate>
+@interface IssueNewMsg : UIViewController<UITextViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic,weak) id<IssueNewMsgProtocol> delegate;
 
 @property (nonatomic,weak) IBOutlet UITextView *contentTF;
 @property (nonatomic,weak) IBOutlet UILabel *timeLabel;
 @property (nonatomic,weak) IBOutlet UIToolbar *bottomToolbar;
+
+/** 上传图片相关*/
+@property (nonatomic,retain) NSMutableArray *imageViewArray;
+@property (nonatomic,retain) NSMutableArray *imageArray;
+- (IBAction) addImageBtnPress:(id)sender;
 - (IBAction) sendBtnPress:(id)sender;
 - (IBAction) cancelBtnPress:(id)sender;
 @end

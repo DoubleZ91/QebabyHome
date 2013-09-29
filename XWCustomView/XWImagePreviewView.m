@@ -57,9 +57,9 @@
 - (void)initSavePreviewImageButton
 {
     _saveImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _saveImageButton.frame = CGRectMake(_previewWidth - 70, _previewHeight - 80, 49, 36);
-    [_saveImageButton setImage:[UIImage imageNamed:@"icon_save.png"] forState:UIControlStateNormal];
-    [_saveImageButton setImage:[UIImage imageNamed:@"icon_save_active.png"] forState:UIControlStateSelected];
+    _saveImageButton.frame = CGRectMake(_previewWidth - 70, _previewHeight -80, 49, 36);
+    [_saveImageButton setImage:[UIImage imageNamed:@"Argentina.png"] forState:UIControlStateNormal];
+    [_saveImageButton setImage:[UIImage imageNamed:@"Brazil.png"] forState:UIControlStateSelected];
     [_saveImageButton addTarget:self action:@selector(savePreviewImage) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_saveImageButton];
 }
@@ -81,6 +81,7 @@
     if ([url hasSuffix:@"gif"]) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             UIImage *image = [UIImage animatedImageWithAnimatedGIFURL:[NSURL URLWithString:url]];
+
             if (!image) {
                 [self showCompletedHUD:@"加载失败了哦!"];
             }

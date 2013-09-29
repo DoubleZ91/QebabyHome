@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "IssueNewMsg.h"
+#import "WaterFallTableViewCell.h"
 @class QebabyHomeData;
 @class CellDetailController;
 @class BabyHomeDataManager;
 
-@interface WaterFallViewController : UITableViewController<IssueNewMsgProtocol>
+@interface WaterFallViewController : UITableViewController<IssueNewMsgProtocol, WaterFallCellDelegate>
 
 //@property (nonatomic, retain) UIRefreshControl *refreshControl;
 @property (nonatomic, retain)CellDetailController *cellDetailController;
