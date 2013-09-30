@@ -207,9 +207,87 @@ static Boolean bNetworkInit = false;
     BabyLogData(@"create growth:%@", data);
     return true;
 }
+
+/** upload image*/
++ (void) uploadImage:(UIImage*) uploadImage fileName:(NSString*)name delegate:(id<BabyNetworkMgrDelegate>)delegate
+{
+    NSData *imageData = UIImageJPEGRepresentation(uploadImage, 0.1);
+    NSURL *url = [NSURL URLWithString:BabyHomeUploadImage];
+    NSURLRequest *request = [BabyNetwork requestForUploadImageUsingPOSTWithURL:url WithImageData:imageData  name:name];
+    
+    BabyLogHttpRequest(request);
+    NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:queue
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               if (connectionError != nil) {
+                                   if ([delegate respondsToSelector:@selector(uploadImageFailure:)]) {
+                                       [delegate  uploadImageFailure:data];
+                                   }
+                               }
+                               else{
+                                   if ([delegate respondsToSelector:@selector(uploadImageSuccess:)]) {
+                                       [delegate uploadImageSuccess:data];
+                                   }
+                               }
+                               
+                               BabyLog(@"image upload error %@",connectionError);
+                               BabyLog(@"response:%@",response);
+                               BabyLogData(@"image upload json:%@", data);
+                            }
+     ];
+}
+
 /** create growth which has content and image*/
 + (bool) createGrowthWithContentAndImageArray:(NSString*) content withImageArray :(NSArray*) imageArr
 {
+    NSDate *date = [NSDate date];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    unsigned int unitFlag = NSDayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit;
+    NSDateComponents *dd = [cal components:unitFlag fromDate:date];
+    int year = [dd year];
+    int month = [dd month];
+    int day = [dd day];
+    NSString *today = [NSString stringWithFormat:@"%d-%d-%d",year,month,day];
+    
+    NSURL *url = [NSURL URLWithString:BabyHomeCreateGrowth];
+    NSMutableDictionary *parameter = [[NSMutableDictionary alloc]init];
+    [parameter setValue:content forKey:@"content"];
+    [parameter setValue:today forKey:@"timeline"];
+    
+    NSString *imageValue = [imageArr componentsJoinedByString:@","];
+    [parameter setValue:imageValue forKey:@"image"];
+    
+    NSHTTPURLResponse *response;
+    NSURLRequest *request = [BabyNetwork requestUsingPOSTWithURL:url WithHttpBodyDict:parameter];
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
+    //    NSString *string = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    
+    NSError *error;
+    NSDictionary *dict;
+    id jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];  ///????&
+    
+    if (jsonDict == nil || error != nil)
+    {
+        NSLog(@"jsonDict || error  is nil.....");
+        return false;
+    }
+    if ([jsonDict isKindOfClass:[NSDictionary class]]) {
+        NSLog(@"json is a Dictionary.");
+        NSLog(@"%@", (NSDictionary*)jsonDict);
+        dict = (NSDictionary*)jsonDict;
+        
+        dict = (NSDictionary*)[dict valueForKey:@"data"];
+        NSInteger code = [[dict valueForKey:@"code"]integerValue];
+        //code 必须等于0
+        if (code) {
+            return false;
+        }
+    }
+    else
+        return false;
+    
+    BabyLogData(@"create growth:%@", data);
     return true;
 }
 @end

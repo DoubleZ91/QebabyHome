@@ -7,6 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+
+@protocol BabyNetworkMgrDelegate;
+
 /** 处理baby的业务*/
 @interface BabyNetworkManager : NSObject
 //-------------------------
@@ -34,9 +37,18 @@
 
 
 /** upload image*/
-//+ (void) uploadImage
++ (void) uploadImage:(UIImage*) uploadImage fileName:(NSString*)name delegate:(id<BabyNetworkMgrDelegate>) delegate ;
 /** create growth which only has content*/
 + (bool) createGrowthWithContent:(NSString*) content;
 /** create growth which has content and image*/
 + (bool) createGrowthWithContentAndImageArray:(NSString*) content withImageArray :(NSArray*) imageArr;
+@end
+
+
+@protocol BabyNetworkMgrDelegate <NSObject>
+
+@optional
+- (void) uploadImageSuccess:(NSData*)data;
+- (void) uploadImageFailure:(NSData*)data;
+
 @end

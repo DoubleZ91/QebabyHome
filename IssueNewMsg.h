@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 @protocol IssueNewMsgProtocol;
-
-@interface IssueNewMsg : UIViewController<UITextViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@protocol BabyNetworkMgrDelegate;
+@interface IssueNewMsg : UIViewController<UITextViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,BabyNetworkMgrDelegate>
 
 @property (nonatomic,weak) id<IssueNewMsgProtocol> delegate;
 

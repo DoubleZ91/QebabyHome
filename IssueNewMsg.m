@@ -13,7 +13,14 @@
 #define SmallImageHeight 57
 @interface IssueNewMsg ()
 {
-
+    /*present其他视图的时候，toolbar会自动发生偏移，且kvo无法跟踪。。所以无法通过toolbar实时位置显示图片。
+     *目前解决方法记录初始toolbar位置，因为dismiss模态视图之后会自动隐藏键盘，toolbar归位
+     */
+     CGRect toolbarOriginFrame;
+    /**记录上传说说的图片的索引*/
+    NSMutableArray *imageIndexArray;
+    /*记录文字*/
+    NSString *contentStr ;
 }
 @end
 
@@ -24,8 +31,10 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        contentStr = @"";
         _imageArray = [[NSMutableArray alloc]init];
         _imageViewArray = [[NSMutableArray alloc]init];
+        imageIndexArray = [[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -43,6 +52,8 @@
     _contentTF.scrollEnabled = YES;
     _contentTF.autoresizingMask &= UIViewAutoresizingNone;
     
+    toolbarOriginFrame = _bottomToolbar.frame;
+    //滑动全屏展示编辑的文字
     UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc ]initWithTarget:self action:@selector(swipeTextView:)];
     swipeGesture.direction = UISwipeGestureRecognizerDirectionDown | UISwipeGestureRecognizerDirectionUp;
     [self.view addGestureRecognizer:swipeGesture];
@@ -52,15 +63,20 @@
     //UIBarButtonItem *btnSend = [[UIBarButtonItem alloc]initWithTitle:@"send" style:UIBarButtonItemStyleBordered target:self action:@selector(sendBtnPress:)];
     //self.navigationItem.rightBarButtonItem = btnSend;
     
+    [_contentTF setText:@"请在此处输入您所要发表的文字 ......."];
+    [_contentTF setFont:[UIFont fontWithName:@"HelveticaNeue" size:11]];
+    [_contentTF setTextColor:[UIColor lightGrayColor]];
+    //[_contentTF becomeFirstResponder];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
-    [_contentTF addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+    [_bottomToolbar addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-     //
+    NSLog(@"_bottom toolbar :::::::::::::::::::::::::::::::::%@ %@",keyPath,change);
 }
 
 - (void) swipeTextView:(UIGestureRecognizer *) gestureRecognizer
@@ -74,10 +90,12 @@
     float contentHeight = MainScreenHeight - 2 * Height(_bottomToolbar) - 40;
     _contentTF.frame = CGRectMake(20 ,Height(_bottomToolbar) + Height(_timeLabel) + 5 , contentWidth, contentHeight);
     
-    [_contentTF setText:@"请在此处输入您所要发表的文字 ......."];
-    [_contentTF setFont:[UIFont fontWithName:@"HelveticaNeue" size:11]];
-    [_contentTF setTextColor:[UIColor lightGrayColor]];
-    //[_contentTF becomeFirstResponder];
+//    if ([contentStr  isEqual: @""]) {
+//        [_contentTF setText:@"请在此处输入您所要发表的文字 ......."];
+//        [_contentTF setFont:[UIFont fontWithName:@"HelveticaNeue" size:11]];
+//        [_contentTF setTextColor:[UIColor lightGrayColor]];
+//        //[_contentTF becomeFirstResponder];
+//    }
     
     NSDate *now = [NSDate date];
     NSDateFormatter  * formatter = [[NSDateFormatter alloc]init];
@@ -101,7 +119,7 @@
         UIImageView * imageView = [_imageViewArray objectAtIndex:i];
         imageView.frame = CGRectMake(X(imageView), Y(imageView) - textviewOffset, Width(imageView), Height(imageView));
     }
-    BabyLog(@"%@",_bottomToolbar);
+    NSLog(@"keyboardshow ::::::::%@",_bottomToolbar);
 }
 
 - (void) keyboardWillHide:(NSNotification*)notification
@@ -116,7 +134,7 @@
         UIImageView * imageView = [_imageViewArray objectAtIndex:i];
         imageView.frame = CGRectMake(X(imageView), Y(imageView) + textviewOffset, Width(imageView), Height(imageView));
     }
-    NSLog(@"%@",_bottomToolbar);
+    NSLog(@"keyboardhide:::::::::::::%@",_bottomToolbar);
 }
 
 
@@ -136,12 +154,28 @@
         [alertView show];
         return;
     }
-    if(![BabyNetworkManager createGrowthWithContent:_contentTF.text])
-    {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"error" message:@"send error.may be you need to login." delegate:nil cancelButtonTitle:@"cancel" otherButtonTitles:nil, nil];
-        [alertView show];
-        return;
+    if (imageIndexArray.count > 0) {
+        if(![BabyNetworkManager createGrowthWithContentAndImageArray: _contentTF.text withImageArray:imageIndexArray])
+        {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"error" message:@"send error.may be you need to login." delegate:nil cancelButtonTitle:@"cancel" otherButtonTitles:nil, nil];
+            [alertView show];
+            return;
+        }else {
+            [self cleanAll];
+        }
     }
+    else {
+        if(![BabyNetworkManager createGrowthWithContent:_contentTF.text])
+        {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"error" message:@"send error.may be you need to login." delegate:nil cancelButtonTitle:@"cancel" otherButtonTitles:nil, nil];
+            [alertView show];
+            return;
+        }
+        else {
+            [self cleanAll];
+        }
+    }
+   
     if ([_delegate respondsToSelector:@selector(dismissThePresented)]) {
         [_delegate dismissThePresented];
     }
@@ -149,8 +183,9 @@
 
 - (IBAction) cancelBtnPress:(id)sender
 {
+    //回复键盘
     [_contentTF resignFirstResponder];
-    [_imageViewArray removeAllObjects];
+    [self cleanAll];
     if ([_delegate respondsToSelector:@selector(dismissThePresented)]) {
         [_delegate dismissThePresented];
     }
@@ -176,7 +211,21 @@
     sheet.tag = 255;
     [sheet showInView:self.view];
 }
-
+#pragma mark -
+#pragma mark - clean function
+- (void) cleanAll
+{
+    //清除图片视图
+    for (UIImageView *imageView in _imageViewArray) {
+        [imageView removeFromSuperview];
+    }
+    [_imageViewArray removeAllObjects];
+    //清除文字内容
+    contentStr = @"";
+    _contentTF.text = @"";
+    //清除图片索引
+    [imageIndexArray removeAllObjects];
+}
 #pragma mark -
 #pragma mark - UIActionSheetDelegate
 // Called when a button is clicked. The view will be automatically dismissed after this call returns
@@ -189,6 +238,7 @@
             switch (buttonIndex) {
                 case 0:
                     //取消
+                    _bottomToolbar.frame = toolbarOriginFrame;//因为会消失。很奇怪。。。。
                     return;
                 case 1:
                     sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -201,6 +251,7 @@
         }
         else {
             if (buttonIndex == 0) {
+                _bottomToolbar.frame = toolbarOriginFrame;//因为会消失。很奇怪。。。。
                 return;
             }
             else {
@@ -241,14 +292,20 @@
     NSString *fullPath =  [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"currentImage.png"];
     
     UIImage *saveImage = [[UIImage alloc]initWithContentsOfFile:fullPath];
+    
+    [BabyNetworkManager uploadImage:saveImage fileName:@"test.png" delegate:self];
 #warning keyboard出现的 时候，添加图片bug
     //添加ImageView
     //CGRect rect = CGRectMake(_imageViewArray.count *(SmallImageWidth + 2), Y(_bottomToolbar) - (Height(_bottomToolbar) + 2), SmallImageWidth, SmallImageHeight);
-    CGRect rect = CGRectMake(_imageViewArray.count *(SmallImageWidth + 2), (Y(_bottomToolbar) - SmallImageHeight), SmallImageWidth, SmallImageHeight);
+    //CGRect rect = CGRectMake(_imageViewArray.count *(SmallImageWidth + 2), (Y(_bottomToolbar) - SmallImageHeight), SmallImageWidth, SmallImageHeight);
+    CGRect rect = CGRectMake(_imageViewArray.count *(SmallImageWidth + 2), toolbarOriginFrame.origin.y - SmallImageHeight, SmallImageWidth, SmallImageHeight);
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:rect];
     imageView.image  = saveImage;
     [self.view addSubview:imageView];
     [_imageViewArray addObject: imageView];
+    
+    NSLog(@"bottom toolbar:::: %@",_bottomToolbar);
+    NSLog(@"imageView ::::::: %@",imageView);
     //设置到相应的imageView
 //    isFullScreen = NO;
 //    [self.imageView setImage:savedImage];
@@ -297,6 +354,10 @@
     }
 }
 
+-(void) textViewDidEndEditing:(UITextView *)textView
+{
+    contentStr = _contentTF.text;  //备份副本
+}
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
     if([text isEqualToString:@"\n"]) {
@@ -310,5 +371,35 @@
     }
     
     return YES;
+}
+
+
+#pragma mark -
+#pragma mark - baby image upload manager delegate
+- (void) uploadImageSuccess:(NSData*)data
+{
+    NSError *error;
+    NSDictionary *dict;
+    NSArray *array;
+    id jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    
+    if (jsonDict == nil || error != nil)
+    {
+        NSLog(@"jsonDict || error  is nil.....");
+    }
+    if ([jsonDict isKindOfClass:[NSDictionary class]]) {
+        NSLog(@"json is a Dictionary.");
+        NSLog(@"%@", (NSDictionary*)jsonDict);
+        dict = (NSDictionary*)jsonDict;
+        
+        array = (NSArray*)[dict valueForKey:@"data"];
+        dict = [array objectAtIndex:0];
+        NSString *imageIndex = [dict valueForKey:@"image"];
+        [imageIndexArray addObject:imageIndex];
+    }
+}
+-(void) uploadImageFailure:(NSData*)data
+{
+    BabyLog(@"upload image failure.........");
 }
 @end

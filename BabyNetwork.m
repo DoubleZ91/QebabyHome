@@ -9,6 +9,7 @@
 #import "BabyNetwork.h"
 #import "BabyDefine.h"
 #import "AFNetworking.h"
+#import <dispatch/dispatch.h>
 static NSString* BabySession;
 @implementation BabyNetwork
 
@@ -61,6 +62,30 @@ static NSString* BabySession;
     }
 }
 
+/** http resquest use POST method with Image for upload image*/
++ (NSMutableURLRequest*) requestForUploadImageUsingPOSTWithURL:(NSURL*) url WithImageData:(NSData*)imageData name:(NSString*)name
+{
+    //setup request object
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
+    [request setHTTPMethod:HTTP_POST_STR];
+    //add contenty-type. use a string doundary.
+    NSString *boundary = @"0xKhTmLbOuNdArY";
+    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data;boundary=%@",boundary];
+    [request addValue:contentType forHTTPHeaderField:@"Content-Type"];
+    
+    NSMutableData *body = [NSMutableData data];
+    // NSASCIIStringEncoding vs NSUTF8StringEncoding
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n",boundary] dataUsingEncoding:NSASCIIStringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition:form-data;name=\"image[]\";filename=%@\r\n",name]dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Type: image/png\r\n\r\n"]dataUsingEncoding:NSUTF8StringEncoding]];
+    //[body appendData:[[NSData dataWithData:imageData] dataUsingEncoding:NSUTF8StringEncoding ]];
+    [body appendData:[NSData dataWithData:imageData]];
+    [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary]dataUsingEncoding:NSUTF8StringEncoding] ];
+    [request setHTTPBody:body];
+    
+    return request;
+}
+
 #pragma mark - GET
 + (NSMutableURLRequest*) requestUsingGETWithURL:(NSURL*) url WithParameterString:(NSString*) parameterStr
 {
@@ -110,12 +135,25 @@ static NSString* BabySession;
 /**通过已经拿到的json数据来处理并获取图片等内容*/
 + (BabyMsgData*) requestBabyMsgWithJSONDictionary:(NSDictionary *)jsonDict
 {
+    //@autoreleasepool {
+
     BabyLog(@"%@",jsonDict);
     NSString *nameStr = [jsonDict valueForKey:@"users_name"];
     NSString *content = [jsonDict valueForKey:@"growth_content"];
     NSUInteger time = (NSUInteger)[[jsonDict valueForKey:@"growth_timeline"] integerValue];
     NSString *headImageURL = [jsonDict valueForKey:@"users_avatar"];
     NSArray *imageArrayURL = [jsonDict valueForKey:@"growth_photos"];
+    
+    NSMutableArray *smallImageURL = [[NSMutableArray alloc] init ];
+    for (NSString *smallURL in imageArrayURL) {
+//        @autoreleasepool {
+//        NSMutableString *str = [NSMutableString stringWithString: smallURL];
+//        [str replaceOccurrencesOfString:@"attachments" withString:@"small" options:NSCaseInsensitiveSearch range:NSMakeRange(20, 35)];
+//            smallURL = [NSString stringWithString:str];
+//        }
+         [smallImageURL addObject: [smallURL stringByReplacingOccurrencesOfString:@"attachments" withString:@"small"]];
+    }
+    
     UIImage *headImage = nil;
     if (headImageURL) {
         headImage = [self requestImageWithURLString:headImageURL];
@@ -125,13 +163,13 @@ static NSString* BabySession;
         NSLog(@"%s %@",__FUNCTION__,@"headImage nil.");
     }
     NSMutableArray *imageArray = [[NSMutableArray alloc]init];
-    if (imageArrayURL == nil || imageArrayURL.count == 0) {
+    if (smallImageURL == nil || smallImageURL.count == 0) {
         NSLog(@"%s %@",__FUNCTION__,@"imageArray nil.");
     }
     else
     {
-        for (int i = 0; i < imageArrayURL.count; i++) {
-            UIImage *image = [self requestImageWithURLString:[imageArrayURL objectAtIndex:i]];
+        for (int i = 0; i < smallImageURL.count; i++) {
+            UIImage *image = [self requestImageWithURLString:[smallImageURL objectAtIndex:i]];
             if (image == nil) {
                 continue;
             }
@@ -144,7 +182,11 @@ static NSString* BabySession;
             [imageArray addObject:image];
         }
     }
+        
+    
     return [[BabyMsgData alloc]initWithAllMsg:nameStr withHeadImage:headImage withTime:time withContent:content withImageArray:imageArray ];
+        
+    //}  //auto release pool
 }
 /**缩放图片*/
 + (UIImage*) scaleToRequireImage:(UIImage*) srcImage

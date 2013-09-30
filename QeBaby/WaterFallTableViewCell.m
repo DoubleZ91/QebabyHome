@@ -18,6 +18,7 @@
         
         _imageURLArray = [[NSMutableArray alloc]init];
         _imageViewArray = [[NSMutableArray alloc]init];
+        _gestureArray = [[NSMutableArray alloc]init];
         //x轴偏移
         float xOffset = 0;
         //y轴偏移
@@ -60,9 +61,16 @@
 //        
 //        yOffset += _contentImageView.frame.size.height;
         NSLog(@" y offset : %f",yOffset);
+        
+        //[_gestureArray addObserver:self forKeyPath:@"count" options:NSKeyValueObservingOptionNew context:nil];
     }
     return self;
 }
+//- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+//{
+//    //
+//    NSLog(@"gesture count");
+//}
 - (void) configCellImageShow:(NSArray *)imageArray
 {
     NSInteger yOffset = HeadViewHeight+ Height(_contentLabel);

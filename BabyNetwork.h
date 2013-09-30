@@ -21,7 +21,8 @@
 + (NSMutableURLRequest*) requestUsingPOSTWithURL:(NSURL*) url WithHttpBodyString: (NSString*) parameterStr;
 /** http resquest use POST method with httpBodyData*/
 + (NSMutableURLRequest*) requestUsingPOSTWithURL:(NSURL*) url WithHttpBodyData: (NSData*) parameterData;
-
+/** http resquest use POST method with Image for upload image*/
++ (NSMutableURLRequest*) requestForUploadImageUsingPOSTWithURL:(NSURL*) url WithImageData:(NSData*)imageData name:(NSString*)name;
 #pragma mark -
 #pragma mark - method for creating http GET request
 /** http resquest use GET method with String Parameter.*/

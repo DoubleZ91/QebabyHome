@@ -34,7 +34,8 @@
 
 //发布说说接口
 #define BabyHomeCreateGrowth @"http://www.qebaby.com/growth/create"
-
+//上传图片的接口
+#define BabyHomeUploadImage @"http://www.qebaby.com/upload/index"
 //http
 #define HTTP_POST_STR @"POST"
 #define HTTP_GET_STR @"GET"
@@ -50,7 +51,8 @@
 #define BabyLogHttpResponse(response) \
                     BabyLog(@"response http header field:%@", [response allHeaderFields]);\
                     BabyLog(@"response status code:%d",response.statusCode);
-
+#define BabyLogURLResponse(response) \
+                    BabyLog(@"request http header field:%@", [response allHTTPHeaderFields]);
 
 //baby notification
 #define BabyMsgHadRefreshed @"tableview msg was change"

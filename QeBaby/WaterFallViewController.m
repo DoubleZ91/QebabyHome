@@ -16,7 +16,7 @@
 #import "IssueNewMsg.h"
 #import "BabyImageViewController.h"
 
-#define LoadMoreNum 10
+#define LoadMoreNum 20
 @interface WaterFallViewController ()
 {
     dispatch_queue_t loadQueue;
