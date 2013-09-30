@@ -13,7 +13,7 @@
 @class CellDetailController;
 @class BabyHomeDataManager;
 
-@interface WaterFallViewController : UITableViewController<IssueNewMsgProtocol, WaterFallCellDelegate>
+@interface WaterFallViewController : UITableViewController<IssueNewMsgProtocol, WaterFallCellDelegate,UIScrollViewDelegate>
 
 //@property (nonatomic, retain) UIRefreshControl *refreshControl;
 @property (nonatomic, retain)CellDetailController *cellDetailController;

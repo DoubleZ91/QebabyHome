@@ -252,8 +252,8 @@
 
 - (void) refreshData
 {
-    BabyLog(@"refreshData.................");
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+//    BabyLog(@"refreshData.................");
+//    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 
 - (void) loadMore
@@ -369,5 +369,20 @@
     CGSize imageViewSize = CGSizeMake(imageMaxWidth, srcSize.height * scale);
     
     return imageViewSize;
+}
+
+#pragma mark -
+#pragma mark - scrollview delegate
+- (void) scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
+    for (NSIndexPath *index in indexPaths) {
+        if (index.row >= _babyHomeData.babyMsgData.count)
+            break;
+        WaterFallTableViewCell *cell = (WaterFallTableViewCell*)[self.tableView cellForRowAtIndexPath:index];
+        BabyMsgData *msg = [_babyHomeData.babyMsgData objectAtIndex:index.row];
+        [cell configCellImageShow:msg.imageArray];
+        [cell setNeedsDisplay];
+    }
 }
 @end
